@@ -4,6 +4,7 @@ const Settings = {
     COMPONENT_IO_OFF_COLOR: "#1C2027",
     COMPONENT_IO_ON_COLOR: "#348c20",
     COMPONENT_IO_CIRCLE_RADIUS: 10,
+    WIRE_COLOR: "#00F",
 };
 
 export default Settings;

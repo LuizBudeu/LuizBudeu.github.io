@@ -1,7 +1,7 @@
 import Settings from "./settings.js";
 import Scene from "./scene.js";
-import Rect from "./ui/rect.js";
-import Circle from "./ui/circle.js";
+import Mouse from "./input/mouse.js";
+import Keyboard from "./input/keyboard.js";
 
 class Core {
     constructor(canvas, ctx) {
@@ -10,7 +10,12 @@ class Core {
         /** @type {CanvasRenderingContext2D} */
         this.ctx = ctx;
 
+        Mouse.initialize(canvas);
+        Keyboard.initialize();
+
         this.currentScene = null;
+
+        this.previousTime = Date.now();
     }
 
     start() {
@@ -19,21 +24,26 @@ class Core {
 
         this.setupScene();
 
-        // Start the game loop for continuous updates
         this.gameLoop();
     }
 
-    update() {
-        this.currentScene.update();
+    update(deltaTime) {
+        this.currentScene.update(deltaTime);
+
+        this.currentScene.draw();
     }
 
     gameLoop() {
         const updateBound = this.update.bind(this);
 
         const loop = () => {
-            updateBound();
+            const currentTime = Date.now();
+            const deltaTime = (currentTime - this.previousTime) / 1000;
+            Settings.DELTA_TIME = deltaTime;
 
-            this.currentScene.draw();
+            updateBound(deltaTime);
+
+            this.previousTime = currentTime;
 
             requestAnimationFrame(loop);
         };
@@ -43,40 +53,7 @@ class Core {
 
     setupScene() {
         this.currentScene = new Scene(this.canvas, this.ctx);
-
         this.currentScene.setupCanvas();
-
-        // // Canvas background
-        // this.currentScene.place(new Rect(this.ctx).at(0, 0).size(this.canvas.width, this.canvas.height).color(Settings.CANVAS_BACKGROUND_COLOR));
-
-        // // Toolbox
-        // this.currentScene.place(
-        //     new Rect(this.ctx)
-        //         .at(0, this.canvas.height - 60)
-        //         .size(this.canvas.width, 60)
-        //         .color("#0C0C0C")
-        // );
-
-        // // Binding box
-        // this.currentScene.place(
-        //     new Rect(this.ctx)
-        //         .at(50, 80)
-        //         .size(this.canvas.width - 100, this.canvas.height - 170)
-        //         .color("#3D3D3D")
-        // );
-
-        // // Inputs
-        // this.currentScene.place(new Circle(this.ctx).at(50, 313).radius(Settings.IO_CIRCLE_RADIUS).color("#1C2027"));
-
-        // this.currentScene.place(new Circle(this.ctx).at(50, 576).radius(Settings.IO_CIRCLE_RADIUS).color("#1C2027"));
-
-        // this.currentScene.place(
-        //     new Circle(this.ctx)
-        //         .at(this.canvas.width - 50, this.canvas.height / 2 - Settings.IO_CIRCLE_RADIUS)
-        //         .radius(Settings.IO_CIRCLE_RADIUS)
-        //         .color("#1C2027")
-        // );
-
         this.currentScene.start();
     }
 }

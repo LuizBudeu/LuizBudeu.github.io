@@ -1,20 +1,25 @@
 import Circle from "../ui/circle.js";
 import Settings from "../settings.js";
+import Signal from "../signal.js";
+import Mouse from "../input/mouse.js";
+import IO from "./io.js";
 
-class Input {
-    constructor(ctx) {
-        /** @type {CanvasRenderingContext2D} */
-        this.ctx = ctx;
-        this.circle = new Circle(this.ctx);
-        this.value = false;
+class Input extends IO {
+    constructor(ctx, interactive = false) {
+        super(ctx);
+
+        if (interactive) {
+            // Event listener for turning input on and off
+            Mouse.addLeftClickDownEvent(this.handleLeftClick.bind(this));
+        }
     }
 
-    setValue(value) {
-        this.value = value;
-        if (value) {
-            this.circle.circleColor = Settings.COMPONENT_IO_ON_COLOR;
-        } else {
-            this.circle.circleColor = Settings.COMPONENT_IO_OFF_COLOR;
+    handleLeftClick({ x, y, button }) {
+        // Check if the left-click is within the circle
+        const distance = Math.sqrt((x - this.circle.x) ** 2 + (y - this.circle.y) ** 2);
+        if (distance <= this.circle.radius()) {
+            // Toggle the value
+            this.value(!this.value());
         }
     }
 }

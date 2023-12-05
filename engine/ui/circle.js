@@ -1,9 +1,13 @@
-class Circle {
+import gameObject from "../baseScript.js";
+
+class Circle extends gameObject {
     constructor(ctx) {
+        super(ctx);
+
         /** @type {CanvasRenderingContext2D} */
         this.ctx = ctx;
-        this.x = 0;
-        this.y = 0;
+        this.x = 100;
+        this.y = 100;
         this.circleRadius = 50;
         this.circleColor = "#000"; // Default color is black
         this.lineWidth = 1; // Default line width is 1
@@ -21,7 +25,8 @@ class Circle {
     }
 
     radius(radius = null) {
-        if (radius !== null) this.circleRadius = radius;
+        if (radius === null) return this.circleRadius; // Return the current radius
+        this.circleRadius = radius;
         return this;
     }
 
