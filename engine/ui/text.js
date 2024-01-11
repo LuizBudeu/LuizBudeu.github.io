@@ -33,7 +33,24 @@ class Text {
         return this;
     }
 
-    // TODO add center method
+    /**
+     * Center text horizontally and vertically inside rect.
+     * @param {Rect} [rect] - The rect.
+     */
+    centerInRect(rect) {
+        // Calculate the center of the rectangle
+        const centerX = rect.x + rect.width / 2;
+        const centerY = rect.y + rect.height / 2;
+
+        this.ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+        const textWidth = this.ctx.measureText(this.textContent).width;
+        const textHeight = this.fontSize;
+
+        const textX = centerX - textWidth / 2;
+        const textY = centerY + textHeight / 3;
+
+        this.at(textX, textY);
+    }
 
     /**
      * Set or get the content of the text.

@@ -1,5 +1,6 @@
 import Signal from "../signal.js";
 import Wire from "../components/wire.js";
+import WiringManager from "./wiringManager.js";
 
 class SelectionManager {
     static selectedIOs = [];
@@ -12,6 +13,14 @@ class SelectionManager {
             Signal.sceneInstance.remove(this.selectedIOs[1].selectionCircle, 0);
             this.selectedIOs.pop();
         }
+
+        // // Handle selection of IO that is already wired: remove the wiring and select the other IO
+        // if (WiringManager.existsWiring(io)) {
+        //     const otherIO = io.IOConnections[0];
+        //     WiringManager.removeWiring(io, otherIO);
+        //     this.selectIO(otherIO);
+        //     return;
+        // }
 
         this.selectedIOs.push(io);
         io.isSelected = true;
@@ -40,7 +49,7 @@ class SelectionManager {
     static connectIOs() {
         this.selectedIOs[0].connect(this.selectedIOs[1]);
 
-        Signal.sceneInstance.addWiring(this.selectedIOs[0], this.selectedIOs[1]);
+        WiringManager.addWiring(this.selectedIOs[0], this.selectedIOs[1]);
 
         this.deselectAll();
     }

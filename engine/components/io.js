@@ -15,7 +15,7 @@ class IO extends gameObject {
         this._value = false;
         this.isSelected = false;
 
-        this.IOConnection = null;
+        this.IOConnections = [];
 
         // Selection circle
         this.selectionCircle = new Circle(this.ctx).color("#00F");
@@ -45,19 +45,19 @@ class IO extends gameObject {
     }
 
     connect(io) {
-        this.IOConnection = io;
-        io.IOConnection = this;
+        this.IOConnections.push(io);
+        io.IOConnections.push(this);
     }
 
     disconnect(io) {
-        this.IOConnection = null;
-        io.IOConnection = null;
+        this.IOConnections.splice(this.IOConnections.indexOf(io), 1);
+        io.IOConnections.splice(io.IOConnections.indexOf(this), 1);
     }
 
     propagate() {
-        if (this.IOConnection) {
-            this.IOConnection.value(this.value());
-        }
+        this.IOConnections.forEach((io) => {
+            io.value(this.value());
+        });
     }
 
     handleRightClick({ x, y, button }) {

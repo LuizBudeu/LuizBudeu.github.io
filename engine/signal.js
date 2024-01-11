@@ -1,4 +1,6 @@
 class Signal {
+    static sceneInstance = null;
+
     static setSceneInstance(sceneInstance) {
         Signal.sceneInstance = sceneInstance;
     }

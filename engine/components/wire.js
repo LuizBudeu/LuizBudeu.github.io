@@ -1,4 +1,5 @@
 import gameObject from "../baseScript.js";
+import Settings from "../settings.js";
 
 class Wire extends gameObject {
     constructor(ctx) {
@@ -10,8 +11,8 @@ class Wire extends gameObject {
         this.endX = 0;
         this.endY = 0;
         this.lineColor = "#000"; // Default color is black
-        this.lineWidth = 2; // Default line width is 2
-        this.dotRadius = 3; // Default dot radius is 3
+        this.lineWidth = Settings.WIRE_WIDTH; // Default line width is 2
+        this.dotRadius = Settings.WIRE_DOT_RADIUS; // Default dot radius is 3
     }
 
     connect(startX, startY, endX, endY) {
